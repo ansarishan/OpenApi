@@ -71,7 +71,7 @@ export default function SignIn() {
         <Button size="small" fullWidth color="primary" href={"/editor"} >
         Create New Project
                     </Button>
-                    <Button size="small"  fullWidth color="primary" href={"/editor"} >
+                    <Button size="small"  fullWidth color="primary" >
                     Upload OpenApi Spec
                     </Button>
 
