@@ -13,6 +13,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import CommentIcon from '@material-ui/icons/Comment';
+import Divider from '@material-ui/core/Divider';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import { Button } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
@@ -21,6 +22,9 @@ import Slide from '@material-ui/core/Slide';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import YAML from 'json2yaml';
+import {CopyToClipboard} from 'react-copy-to-clipboard';
+var ymlText;
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -53,7 +57,53 @@ export default function OutlinedTextFields() {
   const [open, setOpen] = React.useState(false);
 
   function handleClickOpen() {
+    // var test =
+    // YAML.stringify({
+    //   "json": [
+    //     "rigid",
+    //     "better for data interchange"
+    //   ],
+    //   "yaml": [
+    //     "slim and flexible",
+    //     "better for configuration"
+    //   ],
+    //   "object": {
+    //     "key": "value",
+    //     "array": [
+    //       {
+    //         "null_value": null
+    //       },
+    //       {
+    //         "boolean": true
+    //       },
+    //       {
+    //         "integer": 1
+    //       }
+    //     ]
+    //   },
+    //   "paragraph": "Blank lines denote\nparagraph breaks\n",
+    //   "content": "Or we\ncan auto\nconvert line breaks\nto save space"})
+    //   console.log(test);
+   console.log(checked)
+    setValues({ ...values,
+       ['ymlText']:YAML.stringify({
+    
+      title: values.title,
+      version: values.version,
+      description: values.description,
+      serviceurl: values.serviceurl,
+      contactname: values.contactname,
+      contactemail: values.contactemail,
+      licenseurl: values.licenseurl,
+      licensename:values.licensename,
+      servers:checked.map((k,v)=>{
+
+   return {'server':k}
+      })
+
+       }),['copied']:false});
     setOpen(true);
+   // setValues({ ...values, ['ymlText']: 'event.target.value' });
   }
 
   function handleClose() {
@@ -69,7 +119,9 @@ export default function OutlinedTextFields() {
     contactemail: '',
     licenseurl: '',
     licensename:'',
-    servers:''
+    servers:'',
+    copied:false,
+    ymlText:'fhhgjhjghgkjkjkjk'
   });
   const [checked, setChecked] = React.useState([0]);
 
@@ -273,13 +325,44 @@ export default function OutlinedTextFields() {
             <Typography variant="h6" className={classes.title}>
               
             </Typography>
-            <Button color="inherit" onClick={handleClose}>
+            {/* <Button color="inherit" onClick={handleClose}>
               Copy
-            </Button>
+            </Button> */}
+            <CopyToClipboard text={values.ymlText}
+          onCopy={() =>
+            setValues({ ...values, ['copied']: true })
+         
+           
+           }>
+           <Button color="inherit" >Copy to clipboard</Button>
+
+        </CopyToClipboard>
+        {values.copied ? <span style={{color: 'red'}}>Copied.</span> : null}
           </Toolbar>
         </AppBar>
-
-
+        <Typography variant="h6" className={classes.title}>
+              
+            </Typography>
+         
+            <Typography variant="h6" style={{'margin':'100px 100px '}} className={classes.title}>
+            <TextField
+        id="outlined-full-width"
+        label="YAML"
+        readOnly
+        style={{ margin: 8 }}
+        fullWidth
+        multiline
+        rows="80"
+        margin="normal"
+        variant="outlined"
+        InputLabelProps={{
+          shrink: true,
+        }}
+        value={values.ymlText}
+        
+      />
+            </Typography>
+           
       </Dialog>
 
 
